@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using UnityEditor;
 
 public class GameManager : MonoBehaviour
@@ -12,34 +8,25 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     [SerializeField] TextMeshProUGUI bestScoreText;
     [SerializeField] TMP_InputField inputField;
-    private const string BESTSCORE_KEY = "BESTSCORE";
-    private const string BESTPLAYER_KEY = "BESTPLAYER";
-    private const string NONAME = "NoName";
-    private string userName;
+    const string BESTSCORE_KEY = "BESTSCORE";
+    const string BESTPLAYER_KEY = "BESTPLAYER";
+    const string NONAME = "NoName";
+    string userName;
 
+    // Exepression Bodied Member
     public string UserName
     {
-        get { return userName; }
-        set
-        {
-            // if (value.Length == 0)
-            // {
-            //     userName = NONAME;
-            // }
-            userName = (value.Length == 0) ? NONAME : value;
-        }        
+        get => userName;
+        set => userName = (value.Length == 0) ? NONAME : value;
     }
     public string BestPlayer
     {
-        get { return PlayerPrefs.GetString(BESTPLAYER_KEY, NONAME); }
-        set { PlayerPrefs.SetString(BESTPLAYER_KEY, value); }
+        get => PlayerPrefs.GetString(BESTPLAYER_KEY, NONAME);
+        set => PlayerPrefs.SetString(BESTPLAYER_KEY, value);
     }
     public int BestScore
     {
-        get 
-        {
-            return PlayerPrefs.GetInt(BESTSCORE_KEY, 0);
-        }
+        get => PlayerPrefs.GetInt(BESTSCORE_KEY, 0);
         set
         {
             if (BestScore <= value)
@@ -50,7 +37,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void Awake()
+    void Awake()
     {
         if (Instance != null)
         {
@@ -61,30 +48,14 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private void Start()
-    {
-        bestScoreText.text = GetBestText();
-    }
-
-    public string GetBestText()
-    {
-        return $"Best Player : {BestPlayer} : {BestScore}";
-    }
-
-    public void UpdateName()
-    {
-        userName = inputField.text;
-    }
-
+    void Start() => bestScoreText.text = GetBestText();
+    public string GetBestText() => $"Best Player : {BestPlayer} : {BestScore}";
+    public void UpdateName() => userName = inputField.text;
+    public void ExitGame() => Application.Quit();
     public void StartGame()
     {
         UserName = inputField.text;
         SceneManager.LoadScene("main");
-    }
-
-    public void ExitGame()
-    {
-        Application.Quit();
     }
 
     [MenuItem("BlockGame/Reset score")]
